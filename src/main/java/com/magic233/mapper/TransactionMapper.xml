@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magic233.mapper.TransactionMapper">
+  <resultMap id="BaseResultMap" type="com.magic233.entity.Transaction">
+    <id column="hash" jdbcType="VARCHAR" property="hash" />
+    <result column="blockNumber" jdbcType="BIGINT" property="blocknumber" />
+    <result column="from_address" jdbcType="VARCHAR" property="fromAddress" />
+    <result column="to_address" jdbcType="VARCHAR" property="toAddress" />
+    <result column="input" jdbcType="VARCHAR" property="input" />
+    <result column="MethodID" jdbcType="VARCHAR" property="methodid" />
+    <result column="tokenAmount" jdbcType="VARCHAR" property="tokenamount" />
+    <result column="tokenAmount10" jdbcType="DOUBLE" property="tokenamount10" />
+    <result column="tokenAddress" jdbcType="VARCHAR" property="tokenaddress" />
+    <result column="time" jdbcType="BIGINT" property="time" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="decimals" jdbcType="DOUBLE" property="decimals" />
+    <result column="value" jdbcType="DOUBLE" property="value" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    hash, blockNumber, from_address, to_address, input, MethodID, tokenAmount, tokenAmount10, 
+    tokenAddress, time, price, decimals, value
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from transaction
+    where hash = #{hash,jdbcType=VARCHAR}
+  </select>
+  <select id="selectTransaction" resultType="com.magic233.entity.TransactionResult">
+    select tokenAddress as address, sum(value) as value from transaction where 1=1
+    <if test="startTime != null">
+      and time &gt;= #{startTime}
+    </if>
+    <if test="endTime != null">
+      and time &lt;= #{endTime}
+    </if>
+    group by tokenAddress ORDER BY value DESC
+  </select>
+  <select id="selectTransactions" resultType="java.lang.Double">
+    select sum(value) from transaction where 1=1
+    <if test="startTime != null">
+      and time &gt;= #{startTime}
+    </if>
+    <if test="endTime != null">
+      and time &lt;= #{endTime}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from transaction
+    where hash = #{hash,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.magic233.entity.Transaction">
+    insert into transaction (hash, blockNumber, from_address, 
+      to_address, input, MethodID, 
+      tokenAmount, tokenAmount10, tokenAddress, 
+      time, price, decimals, 
+      value)
+    values (#{hash,jdbcType=VARCHAR}, #{blocknumber,jdbcType=BIGINT}, #{fromAddress,jdbcType=VARCHAR}, 
+      #{toAddress,jdbcType=VARCHAR}, #{input,jdbcType=VARCHAR}, #{methodid,jdbcType=VARCHAR}, 
+      #{tokenamount,jdbcType=VARCHAR}, #{tokenamount10,jdbcType=DOUBLE}, #{tokenaddress,jdbcType=VARCHAR}, 
+      #{time,jdbcType=BIGINT}, #{price,jdbcType=DOUBLE}, #{decimals,jdbcType=DOUBLE}, 
+      #{value,jdbcType=DOUBLE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.magic233.entity.Transaction">
+    insert into transaction
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="hash != null">
+        hash,
+      </if>
+      <if test="blocknumber != null">
+        blockNumber,
+      </if>
+      <if test="fromAddress != null">
+        from_address,
+      </if>
+      <if test="toAddress != null">
+        to_address,
+      </if>
+      <if test="input != null">
+        input,
+      </if>
+      <if test="methodid != null">
+        MethodID,
+      </if>
+      <if test="tokenamount != null">
+        tokenAmount,
+      </if>
+      <if test="tokenamount10 != null">
+        tokenAmount10,
+      </if>
+      <if test="tokenaddress != null">
+        tokenAddress,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="decimals != null">
+        decimals,
+      </if>
+      <if test="value != null">
+        value,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="hash != null">
+        #{hash,jdbcType=VARCHAR},
+      </if>
+      <if test="blocknumber != null">
+        #{blocknumber,jdbcType=BIGINT},
+      </if>
+      <if test="fromAddress != null">
+        #{fromAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="toAddress != null">
+        #{toAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="input != null">
+        #{input,jdbcType=VARCHAR},
+      </if>
+      <if test="methodid != null">
+        #{methodid,jdbcType=VARCHAR},
+      </if>
+      <if test="tokenamount != null">
+        #{tokenamount,jdbcType=VARCHAR},
+      </if>
+      <if test="tokenamount10 != null">
+        #{tokenamount10,jdbcType=DOUBLE},
+      </if>
+      <if test="tokenaddress != null">
+        #{tokenaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=BIGINT},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="decimals != null">
+        #{decimals,jdbcType=DOUBLE},
+      </if>
+      <if test="value != null">
+        #{value,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.magic233.entity.Transaction">
+    update transaction
+    <set>
+      <if test="blocknumber != null">
+        blockNumber = #{blocknumber,jdbcType=BIGINT},
+      </if>
+      <if test="fromAddress != null">
+        from_address = #{fromAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="toAddress != null">
+        to_address = #{toAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="input != null">
+        input = #{input,jdbcType=VARCHAR},
+      </if>
+      <if test="methodid != null">
+        MethodID = #{methodid,jdbcType=VARCHAR},
+      </if>
+      <if test="tokenamount != null">
+        tokenAmount = #{tokenamount,jdbcType=VARCHAR},
+      </if>
+      <if test="tokenamount10 != null">
+        tokenAmount10 = #{tokenamount10,jdbcType=DOUBLE},
+      </if>
+      <if test="tokenaddress != null">
+        tokenAddress = #{tokenaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=BIGINT},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="decimals != null">
+        decimals = #{decimals,jdbcType=DOUBLE},
+      </if>
+      <if test="value != null">
+        value = #{value,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where hash = #{hash,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.magic233.entity.Transaction">
+    update transaction
+    set blockNumber = #{blocknumber,jdbcType=BIGINT},
+      from_address = #{fromAddress,jdbcType=VARCHAR},
+      to_address = #{toAddress,jdbcType=VARCHAR},
+      input = #{input,jdbcType=VARCHAR},
+      MethodID = #{methodid,jdbcType=VARCHAR},
+      tokenAmount = #{tokenamount,jdbcType=VARCHAR},
+      tokenAmount10 = #{tokenamount10,jdbcType=DOUBLE},
+      tokenAddress = #{tokenaddress,jdbcType=VARCHAR},
+      time = #{time,jdbcType=BIGINT},
+      price = #{price,jdbcType=DOUBLE},
+      decimals = #{decimals,jdbcType=DOUBLE},
+      value = #{value,jdbcType=DOUBLE}
+    where hash = #{hash,jdbcType=VARCHAR}
+  </update>
+</mapper>

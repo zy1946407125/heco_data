@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magic233.mapper.FeeMapper">
+  <resultMap id="BaseResultMap" type="com.magic233.entity.Fee">
+    <id column="transactionHash" jdbcType="VARCHAR" property="transactionhash" />
+    <result column="blockNumber" jdbcType="BIGINT" property="blocknumber" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="data" jdbcType="VARCHAR" property="data" />
+    <result column="data10" jdbcType="DOUBLE" property="data10" />
+    <result column="time" jdbcType="BIGINT" property="time" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="decimals" jdbcType="DOUBLE" property="decimals" />
+    <result column="value" jdbcType="DOUBLE" property="value" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    transactionHash, blockNumber, address, data, data10, time, price, decimals, value
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from fee
+    where transactionHash = #{transactionhash,jdbcType=VARCHAR}
+  </select>
+  <select id="selectFee" resultType="com.magic233.entity.FeeResult">
+    select address, sum(value) as value from fee where 1=1
+    <if test="startTime != null">
+      and time &gt;= #{startTime}
+    </if>
+    <if test="endTime != null">
+      and time &lt;= #{endTime}
+    </if>
+    group by address ORDER BY value DESC
+  </select>
+  <select id="selectFees" resultType="java.lang.Double">
+    select sum(value) from fee where 1=1
+    <if test="startTime != null">
+      and time &gt;= #{startTime}
+    </if>
+    <if test="endTime != null">
+      and time &lt;= #{endTime}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from fee
+    where transactionHash = #{transactionhash,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.magic233.entity.Fee">
+    insert into fee (transactionHash, blockNumber, address, 
+      data, data10, time, price, 
+      decimals, value)
+    values (#{transactionhash,jdbcType=VARCHAR}, #{blocknumber,jdbcType=BIGINT}, #{address,jdbcType=VARCHAR}, 
+      #{data,jdbcType=VARCHAR}, #{data10,jdbcType=DOUBLE}, #{time,jdbcType=BIGINT}, #{price,jdbcType=DOUBLE}, 
+      #{decimals,jdbcType=DOUBLE}, #{value,jdbcType=DOUBLE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.magic233.entity.Fee">
+    insert into fee
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="transactionhash != null">
+        transactionHash,
+      </if>
+      <if test="blocknumber != null">
+        blockNumber,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="data != null">
+        data,
+      </if>
+      <if test="data10 != null">
+        data10,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="decimals != null">
+        decimals,
+      </if>
+      <if test="value != null">
+        value,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="transactionhash != null">
+        #{transactionhash,jdbcType=VARCHAR},
+      </if>
+      <if test="blocknumber != null">
+        #{blocknumber,jdbcType=BIGINT},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="data != null">
+        #{data,jdbcType=VARCHAR},
+      </if>
+      <if test="data10 != null">
+        #{data10,jdbcType=DOUBLE},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=BIGINT},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="decimals != null">
+        #{decimals,jdbcType=DOUBLE},
+      </if>
+      <if test="value != null">
+        #{value,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.magic233.entity.Fee">
+    update fee
+    <set>
+      <if test="blocknumber != null">
+        blockNumber = #{blocknumber,jdbcType=BIGINT},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="data != null">
+        data = #{data,jdbcType=VARCHAR},
+      </if>
+      <if test="data10 != null">
+        data10 = #{data10,jdbcType=DOUBLE},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=BIGINT},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="decimals != null">
+        decimals = #{decimals,jdbcType=DOUBLE},
+      </if>
+      <if test="value != null">
+        value = #{value,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where transactionHash = #{transactionhash,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.magic233.entity.Fee">
+    update fee
+    set blockNumber = #{blocknumber,jdbcType=BIGINT},
+      address = #{address,jdbcType=VARCHAR},
+      data = #{data,jdbcType=VARCHAR},
+      data10 = #{data10,jdbcType=DOUBLE},
+      time = #{time,jdbcType=BIGINT},
+      price = #{price,jdbcType=DOUBLE},
+      decimals = #{decimals,jdbcType=DOUBLE},
+      value = #{value,jdbcType=DOUBLE}
+    where transactionHash = #{transactionhash,jdbcType=VARCHAR}
+  </update>
+</mapper>
