@@ -11,7 +11,7 @@
  Target Server Version : 80019
  File Encoding         : 65001
 
- Date: 05/08/2021 11:28:43
+ Date: 16/08/2021 13:47:07
 */
 
 SET NAMES utf8mb4;
@@ -52,6 +52,23 @@ CREATE TABLE `fee2`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for fee3
+-- ----------------------------
+DROP TABLE IF EXISTS `fee3`;
+CREATE TABLE `fee3`  (
+  `transactionHash` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `blockNumber` bigint(0) NULL DEFAULT NULL,
+  `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `data` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `data10` double NULL DEFAULT NULL,
+  `time` bigint(0) NULL DEFAULT NULL,
+  `price` double NULL DEFAULT NULL,
+  `decimals` double NULL DEFAULT NULL,
+  `value` double NULL DEFAULT NULL,
+  PRIMARY KEY (`transactionHash`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for transaction
 -- ----------------------------
 DROP TABLE IF EXISTS `transaction`;
@@ -77,6 +94,27 @@ CREATE TABLE `transaction`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `transaction2`;
 CREATE TABLE `transaction2`  (
+  `hash` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `blockNumber` bigint(0) NULL DEFAULT NULL,
+  `from_address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `to_address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `input` varchar(1024) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `MethodID` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `tokenAmount` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `tokenAmount10` double NULL DEFAULT NULL,
+  `tokenAddress` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `time` bigint(0) NULL DEFAULT NULL,
+  `price` double NULL DEFAULT NULL,
+  `decimals` double NULL DEFAULT NULL,
+  `value` double NULL DEFAULT NULL,
+  PRIMARY KEY (`hash`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for transaction3
+-- ----------------------------
+DROP TABLE IF EXISTS `transaction3`;
+CREATE TABLE `transaction3`  (
   `hash` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `blockNumber` bigint(0) NULL DEFAULT NULL,
   `from_address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
